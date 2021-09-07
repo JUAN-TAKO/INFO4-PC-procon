@@ -23,8 +23,7 @@ public class Producer extends Thread{
 
     public void run(){
         int to_produce = new Random().nextInt(maxP-minP+1) + minP;
-        System.out.println("to produce: " + to_produce);
-        while(to_produce > 0){
+        while(to_produce > 0 && !interrupted()){
             try {
                 int to_wait = new Random().nextInt(2*prodTime);
                 System.out.println("P[" + id + "] producing...");
@@ -33,10 +32,7 @@ public class Producer extends Thread{
                 buffer.put(new Message());
     
             } catch (InterruptedException e) {
-                System.out.println("P[" + id + "] ERROR");
-                
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                return;
             }
             to_produce--;
         }

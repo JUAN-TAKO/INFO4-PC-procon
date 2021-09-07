@@ -1,4 +1,4 @@
-package prodcons.v1;
+package prodcons.v2;
 
 import prodcons.IProdConsBuffer;
 import prodcons.Message;
@@ -54,7 +54,12 @@ public class ProdConsBuffer implements IProdConsBuffer{
     public synchronized int totmsg() {
         return total;
     }
-    
+
+    public synchronized void finish() throws InterruptedException {
+        while(queue.length() != 0)
+            wait();
+    }
+
     @Override
     public Message[] get(int k) throws InterruptedException {
         System.out.println("Method not implemented");

@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import prodcons.MessageQueue;
-import prodcons.v1.ProdConsBuffer;
+import prodcons.v6.ProdConsBuffer;
 
 public class Test {
     public static void main(String[] args){
@@ -29,14 +29,38 @@ public class Test {
         Consumer consumers[] = new Consumer[nCons];
         Producer producers[] = new Producer[nProd];
         
-        for(int i=0; i < nCons; i++){
-            consumers[i] = new Consumer(buffer, i, consTime);
-        }
-        System.out.println("ncons: " + nCons);
-        for(int i=0; i < nProd; i++){
-            producers[i] = new Producer(buffer, i, prodTime, minProd, maxProd);
-        }
-        System.out.println("nprod: " + nProd);
+        for(int i=0; i < nCons; i++)
+            consumers[i] = new Consumer(buffer, i, consTime, 1);
 
+        
+        for(int i=0; i < nProd; i++)
+            producers[i] = new Producer(buffer, i, prodTime, minProd, maxProd);
+        
+    
+        //========== V2 ===========
+        try {
+            for(int i=0; i < nProd; i++)
+                producers[i].join();
+
+            buffer.finish();
+
+            for(int i=0; i < nCons; i++)
+               consumers[i].interrupt();
+           
+            for(int i=0; i < nCons; i++)
+               consumers[i].join();
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("OK\n");
+
+
+        //========== V5 ===========
+        buffer = new ProdConsBuffer(10);
+        Producer p1 = new Producer(buffer, 1, 1, 20, 20);
+        Consumer c1 = new Consumer(buffer, 1, 2, 5);
+        Consumer c2 = new Consumer(buffer, 2, 2, 1);
     }    
 }
