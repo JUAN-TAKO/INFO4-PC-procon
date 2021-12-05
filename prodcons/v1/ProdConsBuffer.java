@@ -1,40 +1,46 @@
 package prodcons.v1;
 
-import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
+import prodcons.IProdConsBuffer;
+import prodcons.Message;
 
 public class ProdConsBuffer implements IProdConsBuffer{
-    private Message queue[];
+    private MessageQueue queue;
     
     private int total;
-    private int nb;
 
     public ProdConsBuffer(int qsize){
         queue = new Message[qsize];
         total = 0;
-        nb = 0;
     }
     @Override
     public synchronized void put(Message m) throws InterruptedException {
-        
+        while(m.available() == 0)
+            wait();
+    
+        queue.add(m);
+        total++;
+        notifyAll();
     }
 
     @Override
     public synchronized Message get() throws InterruptedException {
+        while(queue.size() == 0)
+            wait();
+
+        Message m = queue.get();
+        notifyAll();
         
-        return null;
+        return m;
     }
 
     @Override
     public synchronized int nmsg() {
-        // TODO Auto-generated method stub
-        return 0;
+        return queue.size();
     }
 
     @Override
     public synchronized int totmsg() {
-        // TODO Auto-generated method stub
-        return 0;
+        return total;
     }
     
 }
