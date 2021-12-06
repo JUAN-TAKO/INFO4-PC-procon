@@ -4,9 +4,9 @@ import prodcons.Message;
 
 public class MessageQueue {
     private int size;
-    private int begin;
-    private int end;
-    private int available;
+    private static int begin;
+    private static int end;
+    private static int available;
     private Message message[];
 
     public MessageQueue(int size){
@@ -63,6 +63,10 @@ public class MessageQueue {
                 e.printStackTrace();
             }
         }
+        System.out.println("Test A");
+        System.out.println("Available:" + available);
+        System.out.println("Begin:" + begin);
+        System.out.println("End:" + end);
         for (int k = 0; k <3 ; k++){
             try {
                 m.get();
@@ -72,6 +76,10 @@ public class MessageQueue {
                 e.printStackTrace();
             }
         }
+        System.out.println("Test B");
+        System.out.println("Available:" + available);
+        System.out.println("Begin:" + begin);
+        System.out.println("End:" + end);
         for (int k = 0; k < 5 ; k++){
             try {
                 m.add(new Message());
@@ -81,5 +89,22 @@ public class MessageQueue {
                 e.printStackTrace();
             }
         }
+        System.out.println("Test C");
+        System.out.println("Available:" + available);
+        System.out.println("Begin:" + begin);
+        System.out.println("End:" + end);
+        for (int k = 0; k < 7 ; k++){
+            try {
+                m.get();
+            } catch (Exception e) {
+                String s = "Queue out of bounds";
+                System.out.println(s);
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Test D");
+        System.out.println("Available:" + available);
+        System.out.println("Begin:" + begin);
+        System.out.println("End:" + end);
     }
 }
