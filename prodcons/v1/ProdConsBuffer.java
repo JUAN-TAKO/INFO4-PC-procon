@@ -30,7 +30,7 @@ public class ProdConsBuffer implements IProdConsBuffer{
 
     @Override
     public synchronized Message get() throws InterruptedException {
-        while(queue.size() == 0)
+        while(queue.length() == 0)
             wait();
 
         Message m = null;
@@ -47,7 +47,7 @@ public class ProdConsBuffer implements IProdConsBuffer{
 
     @Override
     public synchronized int nmsg() {
-        return queue.size();
+        return queue.length();
     }
 
     @Override

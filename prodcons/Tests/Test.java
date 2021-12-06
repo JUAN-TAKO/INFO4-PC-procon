@@ -32,9 +32,11 @@ public class Test {
         for(int i=0; i < nCons; i++){
             consumers[i] = new Consumer(buffer, i, consTime);
         }
-        for(int i=0; i < nCons; i++){
+        System.out.println("ncons: " + nCons);
+        for(int i=0; i < nProd; i++){
             producers[i] = new Producer(buffer, i, prodTime, minProd, maxProd);
         }
+        System.out.println("nprod: " + nProd);
 
     }    
 }

@@ -16,11 +16,14 @@ public class Producer extends Thread{
         this.id = id;
         buffer = buff;
         prodTime = time;
+        this.minP = minP;
+        this.maxP = maxP;
         this.start();
     }
 
     public void run(){
         int to_produce = new Random().nextInt(maxP-minP+1) + minP;
+        System.out.println("to produce: " + to_produce);
         while(to_produce > 0){
             try {
                 int to_wait = new Random().nextInt(2*prodTime);
@@ -35,6 +38,7 @@ public class Producer extends Thread{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            to_produce--;
         }
         
     }
