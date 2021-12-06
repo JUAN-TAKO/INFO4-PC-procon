@@ -15,7 +15,7 @@ public class Producer extends Thread{
     public Producer(IProdConsBuffer buff, int id, int time, int minP, int maxP){
         this.id = id;
         buffer = buff;
-        consTime = time;
+        prodTime = time;
         this.start();
     }
 
@@ -27,7 +27,7 @@ public class Producer extends Thread{
                 System.out.println("P[" + id + "] producing...");
                 sleep(to_wait);
                 System.out.println("P[" + id + "] submitting...");
-                buffer.add(new Message());
+                buffer.put(new Message());
     
             } catch (InterruptedException e) {
                 System.out.println("P[" + id + "] ERROR");
