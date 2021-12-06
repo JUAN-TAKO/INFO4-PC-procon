@@ -49,7 +49,7 @@ public class MessageQueue {
         return message[begin++];
     }
 
-    public void main(){
+    public static void main(String[] args){
         // test de la classe
         MessageQueue m = new MessageQueue(10);
         
