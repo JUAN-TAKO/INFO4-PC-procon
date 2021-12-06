@@ -1,6 +1,7 @@
 package prodcons.Tests;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import prodcons.MessageQueue;
@@ -10,7 +11,7 @@ public class Test {
     public static void main(String[] args){
         Properties properties = new Properties(); 
         try {
-            properties.loadFromXML(Test.class.getClassLoader().getResourceAsStream("prodcons/Tests/options.xml"));
+            properties.loadFromXML(Test.class.getResourceAsStream("options.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         } 
