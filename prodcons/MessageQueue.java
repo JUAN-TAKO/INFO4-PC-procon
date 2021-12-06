@@ -1,6 +1,6 @@
 package prodcons;
 
-import prodcons.v1.Message;
+import prodcons.Message;
 
 public class MessageQueue {
     private int size;
