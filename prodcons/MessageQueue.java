@@ -48,4 +48,37 @@ public class MessageQueue {
         }
         return message[begin++];
     }
+
+    public void main(){
+        // test de la classe
+        MessageQueue m = new MessageQueue(10);
+        
+        for (int k = 0; k < 7 ; k++){
+            try {
+                m.add(new Message());
+            } catch (Exception e) {
+                String s = "Queue out of bounds:" + k;
+                System.out.println(s);
+                e.printStackTrace();
+            }
+        }
+        for (int k = 0; k <3 ; k++){
+            try {
+                m.get();
+            } catch (Exception e) {
+                String s = "Queue out of bounds:" + k;
+                System.out.println(s);
+                e.printStackTrace();
+            }
+        }
+        for (int k = 0; k < 5 ; k++){
+            try {
+                m.add(new Message());
+            } catch (Exception e) {
+                String s = "Queue out of bounds";
+                System.out.println(s);
+                e.printStackTrace();
+            }
+        }
+    }
 }
