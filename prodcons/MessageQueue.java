@@ -51,6 +51,7 @@ public class MessageQueue {
 
     public static void main(String[] args){
         // test de la classe
+        System.out.println("test");
         MessageQueue m = new MessageQueue(10);
         
         for (int k = 0; k < 7 ; k++){
