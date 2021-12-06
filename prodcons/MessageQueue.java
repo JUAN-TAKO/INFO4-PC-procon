@@ -4,9 +4,9 @@ import prodcons.Message;
 
 public class MessageQueue {
     private int size;
-    private static int begin;
-    private static int end;
-    private static int available;
+    private int begin;
+    private int end;
+    private int available;
     private Message message[];
 
     public MessageQueue(int size){
@@ -21,15 +21,23 @@ public class MessageQueue {
         return available;
     }
 
-    public int size(){
-        return size;
+    public int begin(){
+        return begin;
+    }
+
+    public int end(){
+        return end;
+    }
+
+    public int length(){
+        return size-available;
     }
 
     public void add(Message m) throws Exception{
-        available --;
         if (available == 0){
             throw new Exception("Queue Full: no available places in queue");
         }
+        available --;
         if (end == size-1){
             end = 0;
             message[end] = m;
@@ -40,8 +48,8 @@ public class MessageQueue {
     }
 
     public Message get() throws Exception{
-        available ++;
         if (available == size) throw new Exception("Queue Empty: no message in queue");
+        this.available ++;
         if (begin == size-1){
             begin = 0;
             return message[size-1];
@@ -64,9 +72,9 @@ public class MessageQueue {
             }
         }
         System.out.println("Test A");
-        System.out.println("Available:" + available);
-        System.out.println("Begin:" + begin);
-        System.out.println("End:" + end);
+        System.out.println("Available:" + m.available());
+        System.out.println("Begin:" + m.begin());
+        System.out.println("End:" + m.end());
         for (int k = 0; k <3 ; k++){
             try {
                 m.get();
@@ -77,9 +85,9 @@ public class MessageQueue {
             }
         }
         System.out.println("Test B");
-        System.out.println("Available:" + available);
-        System.out.println("Begin:" + begin);
-        System.out.println("End:" + end);
+        System.out.println("Available:" + m.available());
+        System.out.println("Begin:" + m.begin());
+        System.out.println("End:" + m.end());
         for (int k = 0; k < 5 ; k++){
             try {
                 m.add(new Message());
@@ -90,9 +98,9 @@ public class MessageQueue {
             }
         }
         System.out.println("Test C");
-        System.out.println("Available:" + available);
-        System.out.println("Begin:" + begin);
-        System.out.println("End:" + end);
+        System.out.println("Available:" + m.available());
+        System.out.println("Begin:" + m.begin());
+        System.out.println("End:" + m.end());
         for (int k = 0; k < 7 ; k++){
             try {
                 m.get();
@@ -103,8 +111,31 @@ public class MessageQueue {
             }
         }
         System.out.println("Test D");
-        System.out.println("Available:" + available);
-        System.out.println("Begin:" + begin);
-        System.out.println("End:" + end);
+        System.out.println("Available:" + m.available());
+        System.out.println("Begin:" + m.begin());
+        System.out.println("End:" + m.end());
+
+        MessageQueue m2 = new MessageQueue(1);
+        try {
+            m2.add(new Message());
+            m2.get();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("Test E");
+        System.out.println("Available:" + m2.available());
+        System.out.println("Begin:" + m2.begin());
+        System.out.println("End:" + m2.end());
+        try {
+            m2.add(new Message());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("Test F");
+        System.out.println("Available:" + m2.available());
+        System.out.println("Begin:" + m2.begin());
+        System.out.println("End:" + m2.end());
     }
 }
