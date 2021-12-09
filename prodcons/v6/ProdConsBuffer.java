@@ -9,12 +9,12 @@ import prodcons.MessageQueue;
 public class ProdConsBuffer implements IProdConsBuffer{
     private MessageQueue queue;
     private int total;
-    private Semaphore sem;
+    private int last_multi_id;
 
     public ProdConsBuffer(int qsize){
         queue = new MessageQueue(qsize);
-        sem = new Semaphore(1);
         total = 0;
+        last_multi_id = -1;
     }
     @Override
     public synchronized void put(Message m) throws InterruptedException {
@@ -32,23 +32,34 @@ public class ProdConsBuffer implements IProdConsBuffer{
     }
 
     @Override
-    public Message get() throws InterruptedException {
-        sem.acquire();
-        Message m = null;
-        synchronized(this){
-            while(queue.length() == 0)
-                wait();
+    public Message get() throws InterruptedException{
+        return get_(-1);
+    }
 
-            
+    @Override
+    public Message get_(int last_id_read) throws InterruptedException {
+        Message m = null;
+        synchronized(this){            
             try {
-                m = queue.get();
-            } catch (Exception e) {
+                while(   queue.length() == 0 
+                      || (m = queue.peek()).getID() == last_id_read
+                      || (last_multi_id >= 0 && last_multi_id != m.getID())){
+                    
+
+                    wait();
+                }
+
+                if(m.consume() == 0){
+                    queue.get();
+                    notifyAll();
+                }
+                m = new Message(m);
+
+            } catch (IndexOutOfBoundsException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            notifyAll();
         }
-        sem.release();
         return m;
     }
 
@@ -68,25 +79,34 @@ public class ProdConsBuffer implements IProdConsBuffer{
     }
 
     @Override
-    public synchronized Message[] get(int k) throws InterruptedException {
-        sem.acquire();
-        Message[] msg = new Message[k];
-        synchronized(this){
-            
-            for(int i=0; i < k; i++){
-                while(queue.length() == 0)
-                    wait();
+    public Message[] get(int k) throws InterruptedException {
+        return get_(-1, k);
+    }
 
-                try {
-                    msg[i] = queue.get();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+    @Override
+    public synchronized Message[] get_(int last_id_read, int k) throws InterruptedException {
+        Message[] msg = new Message[k];
+    
+        for(int i=0; i < k; i++){
+            try {
+                Message m;
+                while(queue.length() == 0 || (m = queue.peek()).getID() == last_id_read){
+                    wait();
                 }
-                notifyAll();
+
+                if(m.consume() == 0){
+                    queue.get();
+                    notifyAll();
+                }
+                last_id_read = m.getID();
+                last_multi_id = last_id_read;
+                msg[i] = new Message(m);
+            } catch (IndexOutOfBoundsException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
-        sem.release();
+        last_multi_id = -1;
         return msg;
     }
     

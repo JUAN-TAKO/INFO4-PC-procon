@@ -11,13 +11,15 @@ public class Producer extends Thread{
     private int prodTime;
     private int minP;
     private int maxP;
+    private int dup;
 
-    public Producer(IProdConsBuffer buff, int id, int time, int minP, int maxP){
+    public Producer(IProdConsBuffer buff, int id, int time, int minP, int maxP, int dup){
         this.id = id;
         buffer = buff;
         prodTime = time;
         this.minP = minP;
         this.maxP = maxP;
+        this.dup = dup;
         this.start();
     }
 
@@ -29,7 +31,7 @@ public class Producer extends Thread{
                 System.out.println("P[" + id + "] producing...");
                 sleep(to_wait);
                 System.out.println("P[" + id + "] submitting...");
-                buffer.put(new Message());
+                buffer.put(new Message(dup));
     
             } catch (InterruptedException e) {
                 return;

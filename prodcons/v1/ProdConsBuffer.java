@@ -56,10 +56,24 @@ public class ProdConsBuffer implements IProdConsBuffer{
     }
     
     @Override
+    public Message get_(int l) throws InterruptedException {
+        System.out.println("Method not implemented");
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
     public Message[] get(int k) throws InterruptedException {
         System.out.println("Method not implemented");
         // TODO Auto-generated method stub
         return null;
     }
+    @Override
+    public Message[] get_(int l, int k) throws InterruptedException {
+        System.out.println("Method not implemented");
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     
 }

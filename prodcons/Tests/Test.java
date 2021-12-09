@@ -34,7 +34,7 @@ public class Test {
 
         
         for(int i=0; i < nProd; i++)
-            producers[i] = new Producer(buffer, i, prodTime, minProd, maxProd);
+            producers[i] = new Producer(buffer, i, prodTime, minProd, maxProd, 1);
         
     
         //========== V2 ===========
@@ -54,13 +54,58 @@ public class Test {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println("OK\n");
+        System.out.println("\nOK 1/3\n\n");
 
 
         //========== V5 ===========
         buffer = new ProdConsBuffer(10);
-        Producer p1 = new Producer(buffer, 1, 1, 20, 20);
+        Producer p1 = new Producer(buffer, 1, 1, 20, 20, 1);
         Consumer c1 = new Consumer(buffer, 1, 2, 5);
         Consumer c2 = new Consumer(buffer, 2, 2, 1);
+
+        try{
+            p1.join();
+            c1.interrupt();
+            c2.interrupt();
+            c1.join();
+            c2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        
+
+        System.out.println("\nOK 2/3\n\n");
+        
+        Consumer c3, c4;
+        Producer p2;
+        buffer = new ProdConsBuffer(3);
+        
+        p1 = new Producer(buffer, 1, 1, 3, 3, 3);
+        p2 = new Producer(buffer, 2, 1, 6, 6, 1);
+        
+        c1 = new Consumer(buffer, 1, 2, 3);
+        c2 = new Consumer(buffer, 2, 2, 1);
+        c3 = new Consumer(buffer, 3, 2, 1);
+        c4 = new Consumer(buffer, 4, 2, 1);
+
+
+        try{
+            p1.join();
+            p2.join();
+            c1.interrupt();
+            c2.interrupt();
+            c3.interrupt();
+            c4.interrupt();
+            c1.join();
+            c2.join();
+            c3.join();
+            c4.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        
+        System.out.println("\nOK 3/3\n\n");
     }    
 }
