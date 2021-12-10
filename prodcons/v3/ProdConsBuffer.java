@@ -21,7 +21,7 @@ public class ProdConsBuffer implements IProdConsBuffer{
     public void put(Message m) throws InterruptedException {
         semP.acquire();
         synchronized(this){
-            while(queue.available() == 0);
+            while(queue.available() == 0)
                 wait();
             try {
                 queue.add(m);
@@ -30,6 +30,7 @@ public class ProdConsBuffer implements IProdConsBuffer{
                 e.printStackTrace();
             }
             total++;
+            notifyAll();
         }
         semP.release();
     }
@@ -70,21 +71,22 @@ public class ProdConsBuffer implements IProdConsBuffer{
     
     @Override
     public Message get_(int l) throws InterruptedException {
-        System.out.println("Method not implemented");
-        // TODO Auto-generated method stub
-        return null;
+        return get();
     }
     
     @Override
     public Message[] get(int k) throws InterruptedException {
+        if(k==1){
+            Message[] m = new Message[1];
+            m[0] = get();
+            return m;
+        }
         System.out.println("Method not implemented");
         // TODO Auto-generated method stub
         return null;
     }
     @Override
     public Message[] get_(int l, int k) throws InterruptedException {
-        System.out.println("Method not implemented");
-        // TODO Auto-generated method stub
-        return null;
+        return get(k);
     }
 }

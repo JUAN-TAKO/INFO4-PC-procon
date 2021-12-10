@@ -1,4 +1,4 @@
-package prodcons.v6;
+package prodcons.v7;
 
 import java.util.concurrent.Semaphore;
 
@@ -37,28 +37,29 @@ public class ProdConsBuffer implements IProdConsBuffer{
     }
 
     @Override
-    public synchronized Message get_(int last_id_read) throws InterruptedException {
-        Message m = null;         
-        try {
-            while(   queue.length() == 0 
-                    || (m = queue.peek()).getID() == last_id_read
-                    || (last_multi_id >= 0 && last_multi_id != m.getID())){
-                
+    public Message get_(int last_id_read) throws InterruptedException {
+        Message m = null;
+        synchronized(this){            
+            try {
+                while(   queue.length() == 0 
+                      || (m = queue.peek()).getID() == last_id_read
+                      || (last_multi_id >= 0 && last_multi_id != m.getID())){
+                    
 
-                wait();
+                    wait();
+                }
+
+                if(m.consume() == 0){
+                    queue.get();
+                    notifyAll();
+                }
+                m = new Message(m);
+
+            } catch (IndexOutOfBoundsException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-
-            if(m.consume() == 0){
-                queue.get();
-                notifyAll();
-            }
-            m = new Message(m);
-
-        } catch (IndexOutOfBoundsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        
         return m;
     }
 

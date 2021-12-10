@@ -1,4 +1,4 @@
-package prodcons.v6;
+package prodcons.v5;
 
 import java.util.concurrent.Semaphore;
 
@@ -68,7 +68,7 @@ public class ProdConsBuffer implements IProdConsBuffer{
     }
 
     @Override
-    public synchronized Message[] get(int k) throws InterruptedException {
+    public Message[] get(int k) throws InterruptedException {
         sem.acquire();
         Message[] msg = new Message[k];
         synchronized(this){
@@ -92,16 +92,13 @@ public class ProdConsBuffer implements IProdConsBuffer{
 
     @Override
     public Message get_(int l) throws InterruptedException {
-        System.out.println("Method not implemented");
-        // TODO Auto-generated method stub
-        return null;
+        return get();
     }
     
+
     @Override
     public Message[] get_(int l, int k) throws InterruptedException {
-        System.out.println("Method not implemented");
-        // TODO Auto-generated method stub
-        return null;
+        return get(k);
     }
     
 }

@@ -2,7 +2,7 @@ package prodcons;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Message {
+public class Message{
     private static AtomicInteger gid = new AtomicInteger(0);
     private final int id;
     private AtomicInteger count;

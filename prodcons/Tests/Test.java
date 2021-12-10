@@ -65,6 +65,7 @@ public class Test {
 
         try{
             p1.join();
+            buffer.finish();
             c1.interrupt();
             c2.interrupt();
             c1.join();
@@ -93,6 +94,7 @@ public class Test {
         try{
             p1.join();
             p2.join();
+            buffer.finish();
             c1.interrupt();
             c2.interrupt();
             c3.interrupt();
