@@ -13,8 +13,8 @@ public class ProdConsBuffer implements IProdConsBuffer{
 
     public ProdConsBuffer(int qsize){
         queue = new MessageQueue(qsize);
-        semP = new Semaphore(qsize, true);
-        semG = new Semaphore(qsize, true);
+        semP = new Semaphore(1, true);
+        semG = new Semaphore(1, true);
         total = 0;
     }
     @Override
